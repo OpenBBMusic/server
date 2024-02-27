@@ -1,10 +1,10 @@
-module github.com/OpenBBMusic/server
+module github.com/bb-music/server
 
 go 1.20
 
 require (
-	github.com/OpenBBMusic/desktop v0.0.0-20240226161358-6cbcab0de57c
 	github.com/gin-gonic/gin v1.9.1
+	github.com/bb-music/desktop v0.0.1
 )
 
 require (

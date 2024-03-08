@@ -1,10 +1,11 @@
 github.com/bb-music/desktop v0.0.1 h1:BemGmPgcitqbSRR7bA553evEHH0+uY2QKElhergl064=
 github.com/bb-music/desktop v0.0.1/go.mod h1:qcevfpE4lbaqHQ41rFCmHtj/6v1CDF53FTAi6+x4ZrM=
-github.com/bb-music/desktop v0.0.2 h1:KkgJO0xvZmIL/rw4Wl9FK10Fv//4AdRsxwXwr0kEn80=
-github.com/bb-music/desktop v0.0.2/go.mod h1:PS5UvFo3Fwya8iDvY9kzcXezy87qknBi15rvdz0IIsQ=
-github.com/bb-music/desktop v0.0.3 h1:zdgfi4wOYbJjil+sljbKl0K0WOA0KtUFUatF/x0BkIY=
-github.com/bb-music/desktop v0.0.3/go.mod h1:PS5UvFo3Fwya8iDvY9kzcXezy87qknBi15rvdz0IIsQ=
-github.com/bep/debounce v1.2.1 h1:v67fRdBA9UQu2NhLFXrSg0Brw7CexQekrBwDMM8bzeY=
+github.com/bb-music/desktop v0.0.4 h1:m3HT4dyDB/I8ZLHili5wM9QhWNwtUMA5f+3AT1uTCas=
+github.com/bb-music/desktop v0.0.4/go.mod h1:PS5UvFo3Fwya8iDvY9kzcXezy87qknBi15rvdz0IIsQ=
+github.com/bb-music/desktop v0.0.6 h1:4EwXUN3x7BoP/JxtsVemDUJ9ylsWuiVWYDQuwaoYspY=
+github.com/bb-music/desktop v0.0.6/go.mod h1:PS5UvFo3Fwya8iDvY9kzcXezy87qknBi15rvdz0IIsQ=
+github.com/bb-music/desktop v0.0.7 h1:mZgx34VNJNQ4FVfrRPv3gZEeg40ehXv43caydGCMa1w=
+github.com/bb-music/desktop v0.0.7/go.mod h1:PS5UvFo3Fwya8iDvY9kzcXezy87qknBi15rvdz0IIsQ=
 github.com/bep/debounce v1.2.1/go.mod h1:H8yggRPQKLUhUoqrJC1bO2xNya7vanpDl7xR3ISbCJ0=
 github.com/bytedance/sonic v1.5.0/go.mod h1:ED5hyg4y6t3/9Ku1R6dU/4KyJ48DZ4jPhfY1O2AihPM=
 github.com/bytedance/sonic v1.10.0-rc/go.mod h1:ElCzW+ufi8qKqNW0FY314xriJhyJhuoJ3gFZdAHF7NM=

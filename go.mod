@@ -3,8 +3,8 @@ module github.com/bb-music/server
 go 1.20
 
 require (
-	github.com/bb-music/desktop v0.0.3
 	github.com/gin-gonic/gin v1.9.1
+	github.com/bb-music/desktop v0.0.7
 )
 
 require (

@@ -51,7 +51,7 @@ func GetConfigDir() string {
 
 type OriginService interface {
 	GetConfig() any
-	InitConfig() error
+	InitConfig(force bool) error
 	Search(params bb_type.SearchParams) (*bb_type.SearchResponse, error)
 	SearchDetail(id string) (*bb_type.SearchItem, error)
 	GetMusicFile(id string) (*httputil.ReverseProxy, *http.Request, error)
@@ -63,15 +63,15 @@ func NewServer(port int, cacheDir string) *bb_server.Server {
 	log.Println("端口:", port)
 	log.Println("缓存目录:", cacheDir)
 	log.Println("注册音乐源服务")
-
-	// 日志
+	// 日志输出
 	svcLogger := NewSvcLogger()
+
 	bili := app_bili.New(cacheDir, svcLogger)
 	// 注册源服务
 	service := map[bb_type.OriginType]OriginService{
 		bb_type.BiliOriginName: bili,
 	}
-	bili.InitConfig()
+	bili.InitConfig(false)
 
 	// 初始化 gin
 	r := gin.New()

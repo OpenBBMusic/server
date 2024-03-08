@@ -16,28 +16,44 @@ import (
 	"github.com/bb-music/desktop/pkg/bb_type"
 	"github.com/bb-music/server/middlewares"
 	"github.com/bb-music/server/resp"
+	"github.com/bb-music/server/utils"
 	"github.com/gin-gonic/gin"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func main() {
+	configDir := GetConfigDir()
+	log.Println("configDir", configDir)
+	if !utils.IsDev() {
+		fmt.Println("生产环境")
+		gin.SetMode(gin.ReleaseMode)
+		log.SetOutput(&lumberjack.Logger{
+			Filename:   filepath.Join(configDir, "logs/log.log"),
+			MaxSize:    100,   // 在进行切割之前，日志文件的最大大小（以MB为单位）
+			MaxBackups: 10,    // 保留旧文件的最大个数
+			MaxAge:     30,    // 保留旧文件的最大天数
+			Compress:   false, // 是否压缩/归档旧文件
+		})
+	} else {
+		log.Println("开发环境")
+	}
+
 	port := 9799
-	fmt.Println(port)
-	srv := NewServer(port, GetConfigDir())
-	fmt.Printf("服务已启动：http://127.0.0.1:%v\n", port)
+	srv := NewServer(port, configDir)
+	log.Printf("服务已启动：http://127.0.0.1:%v\n", port)
 	srv.Run()
 }
 
 func GetConfigDir() string {
-	dir, _ := filepath.Abs("./.bb_music")
-	configDir := filepath.Join(dir, ".bb_music")
+	configDir, _ := filepath.Abs("./.bb_music")
 	return configDir
 }
 
 type OriginService interface {
 	GetConfig() any
 	InitConfig() error
-	Search(params bb_type.SearchParams) (bb_type.SearchResponse, error)
-	SearchDetail(id string) (bb_type.SearchItem, error)
+	Search(params bb_type.SearchParams) (*bb_type.SearchResponse, error)
+	SearchDetail(id string) (*bb_type.SearchItem, error)
 	GetMusicFile(id string) (*httputil.ReverseProxy, *http.Request, error)
 	DownloadMusic(params bb_type.DownloadMusicParams) (string, error)
 }
@@ -48,7 +64,9 @@ func NewServer(port int, cacheDir string) *bb_server.Server {
 	log.Println("缓存目录:", cacheDir)
 	log.Println("注册音乐源服务")
 
-	bili := app_bili.New(cacheDir)
+	// 日志
+	svcLogger := NewSvcLogger()
+	bili := app_bili.New(cacheDir, svcLogger)
 	// 注册源服务
 	service := map[bb_type.OriginType]OriginService{
 		bb_type.BiliOriginName: bili,
@@ -57,7 +75,7 @@ func NewServer(port int, cacheDir string) *bb_server.Server {
 
 	// 初始化 gin
 	r := gin.New()
-	r.Use(middlewares.Cors(), gin.Recovery())
+	r.Use(middlewares.Cors(), middlewares.RequestLogger(), gin.Recovery())
 
 	// 获取源的配置信息
 	r.GET("/", func(ctx *gin.Context) {
@@ -113,6 +131,7 @@ func NewServer(port int, cacheDir string) *bb_server.Server {
 		proxy, req, err := service[origin].GetMusicFile(id)
 
 		if err != nil {
+			fmt.Printf("Err: %+v\n", err)
 			ctx.JSON(resp.ServerErr(err, "获取歌曲文件失败"))
 			return
 		}
@@ -169,4 +188,21 @@ func NewServer(port int, cacheDir string) *bb_server.Server {
 		Addr:    ":" + strconv.Itoa(port),
 		Handler: r,
 	}, log.Println)
+}
+
+// 自用应用log服务
+type SvcLogger struct{}
+
+func NewSvcLogger() *SvcLogger {
+	return &SvcLogger{}
+}
+
+func (l *SvcLogger) Info(message ...string) {
+	log.Println("BiliSvc Info | ", message)
+}
+func (l *SvcLogger) Warn(message ...string) {
+	log.Println("BiliSvc Warn | ", message)
+}
+func (l *SvcLogger) Error(message ...string) {
+	log.Println("BiliSvc Err | ", message)
 }

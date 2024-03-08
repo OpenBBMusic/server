@@ -3,13 +3,13 @@ module github.com/bb-music/server
 go 1.20
 
 require (
+	github.com/bb-music/desktop v0.0.3
 	github.com/gin-gonic/gin v1.9.1
-	github.com/bb-music/desktop v0.0.1
 )
 
 require (
 	github.com/bep/debounce v1.2.1 // indirect
-	github.com/bytedance/sonic v1.11.0 // indirect
+	github.com/bytedance/sonic v1.11.2 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
 	github.com/chenzhuoyu/iasm v0.9.1 // indirect
 	github.com/duke-git/lancet/v2 v2.2.9 // indirect

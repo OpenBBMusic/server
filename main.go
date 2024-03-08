@@ -101,8 +101,6 @@ func NewServer(port int, cacheDir string) *bb_server.Server {
 			Keyword: keyword,
 			Page:    page,
 		})
-		fmt.Println(data)
-		fmt.Println(err)
 		if err != nil {
 			ctx.JSON(resp.ServerErr(err, "查询失败"))
 			return
@@ -131,7 +129,6 @@ func NewServer(port int, cacheDir string) *bb_server.Server {
 		proxy, req, err := service[origin].GetMusicFile(id)
 
 		if err != nil {
-			fmt.Printf("Err: %+v\n", err)
 			ctx.JSON(resp.ServerErr(err, "获取歌曲文件失败"))
 			return
 		}

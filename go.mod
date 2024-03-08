@@ -3,8 +3,9 @@ module github.com/bb-music/server
 go 1.20
 
 require (
-	github.com/gin-gonic/gin v1.9.1
 	github.com/bb-music/desktop v0.0.7
+	github.com/gin-gonic/gin v1.9.1
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
 require (
@@ -57,6 +58,5 @@ require (
 	golang.org/x/sys v0.17.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/protobuf v1.32.0 // indirect
-	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

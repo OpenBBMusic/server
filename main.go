@@ -35,9 +35,9 @@ func GetConfigDir() string {
 
 type OriginService interface {
 	GetConfig() any
-	InitConfig() error
-	Search(params bb_type.SearchParams) (bb_type.SearchResponse, error)
-	SearchDetail(id string) (bb_type.SearchItem, error)
+	InitConfig(force bool) error
+	Search(params bb_type.SearchParams) (*bb_type.SearchResponse, error)
+	SearchDetail(id string) (*bb_type.SearchItem, error)
 	GetMusicFile(id string) (*httputil.ReverseProxy, *http.Request, error)
 	DownloadMusic(params bb_type.DownloadMusicParams) (string, error)
 }
@@ -47,13 +47,15 @@ func NewServer(port int, cacheDir string) *bb_server.Server {
 	log.Println("端口:", port)
 	log.Println("缓存目录:", cacheDir)
 	log.Println("注册音乐源服务")
+	// 日志输出
+	svcLogger := NewSvcLogger()
 
-	bili := app_bili.New(cacheDir)
+	bili := app_bili.New(cacheDir, svcLogger)
 	// 注册源服务
 	service := map[bb_type.OriginType]OriginService{
 		bb_type.BiliOriginName: bili,
 	}
-	bili.InitConfig()
+	bili.InitConfig(false)
 
 	// 初始化 gin
 	r := gin.New()
@@ -169,4 +171,21 @@ func NewServer(port int, cacheDir string) *bb_server.Server {
 		Addr:    ":" + strconv.Itoa(port),
 		Handler: r,
 	}, log.Println)
+}
+
+// 自用应用log服务
+type SvcLogger struct{}
+
+func NewSvcLogger() *SvcLogger {
+	return &SvcLogger{}
+}
+
+func (l *SvcLogger) Info(message ...string) {
+	log.Println("BiliSvc Info | ", message)
+}
+func (l *SvcLogger) Warn(message ...string) {
+	log.Println("BiliSvc Warn | ", message)
+}
+func (l *SvcLogger) Error(message ...string) {
+	log.Println("BiliSvc Err | ", message)
 }

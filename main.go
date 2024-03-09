@@ -17,14 +17,14 @@ import (
 var assetFS embed.FS
 
 func main() {
-	port := *flag.Int("p", 9799, "启动端口号")
-	dev := *flag.Bool("dev", false, "以开发模式启动")
+	port := flag.Int("p", 9799, "启动端口号")
+	dev := flag.Bool("dev", false, "以开发模式启动")
 	flag.Parse()
 
 	configDir := GetConfigDir()
 
 	log.Println("configDir", configDir)
-	if !dev {
+	if !*dev {
 		fmt.Println("生产环境")
 		gin.SetMode(gin.ReleaseMode)
 		log.SetOutput(&lumberjack.Logger{
@@ -41,8 +41,8 @@ func main() {
 	r := gin.New()
 	r.Use(middlewares.Cors(), middlewares.FeAssets(assetFS), middlewares.RequestLogger(), gin.Recovery())
 
-	srv := api.NewServer(r, port, configDir)
-	log.Printf("服务已启动：http://127.0.0.1:%v\n", port)
+	srv := api.NewServer(r, *port, configDir)
+	log.Printf("服务已启动：http://127.0.0.1:%v\n", *port)
 	srv.Run()
 }
 

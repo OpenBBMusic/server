@@ -61,7 +61,7 @@ func getDownloadURL(token string) string {
 	}
 
 	for _, item := range data.Assets {
-		if item.Name == "dist.tar.gz" {
+		if item.Name == "web_dist.tar.gz" {
 			return item.Url
 		}
 	}
@@ -113,7 +113,9 @@ func unTarFile(url string) error {
 }
 
 func createFile(name string) (*os.File, error) {
-	err := os.MkdirAll(string([]rune(name)[0:strings.LastIndex(name, "/")]), 0755)
+	name = strings.Replace(name, "client/web/", "", 1)
+	dir := string([]rune(name)[0:strings.LastIndex(name, "/")])
+	err := os.MkdirAll(dir, 0755)
 	if err != nil {
 		return nil, err
 	}

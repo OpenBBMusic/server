@@ -1,7 +1,7 @@
 # 哔哔音乐服务端
 
 将哔哔音乐运行在服务器中，提供 API 接口，自由调用。也可以通过浏览器访问使用
-![](./doc/preview.png)
+![](./doc/pc-preview.png)
 
 ## 拉取前端资源
 
@@ -9,9 +9,7 @@
 go run cmd/pullfe.go --token={githubtoken}
 ```
 
-或手动下载解压 dist.tar.gz 文件, 保证 dist 目录结构
-
-https://github.com/bb-music/web/releases
+或手动下载解压 [web_dist.tar.gz](https://github.com/bb-music/web/releases) 文件, 保证 dist 目录结构
 
 ```
 cmd

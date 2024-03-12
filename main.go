@@ -9,8 +9,6 @@ import (
 
 	pullfe "github.com/bb-music/server/internal/pull_fe"
 	"github.com/bb-music/server/internal/server"
-	"github.com/bb-music/server/middlewares"
-	"github.com/gin-gonic/gin"
 )
 
 //go:embed dist/*
@@ -20,16 +18,13 @@ func main() {
 	config := GetConfig()
 	fmt.Printf("CONFIG: %+v\n", config)
 
+	var asset *embed.FS
 	if config.BuildFeAssets {
+		asset = &assetFS
 		pullfe.Start(config.GithubToken)
 	}
 
-	server.Run(config.Port, config.IsDev, func(r *gin.Engine) {
-		if config.BuildFeAssets {
-			r.Use(middlewares.FeAssets(assetFS))
-		}
-	})
-
+	server.Run(config.Port, config.IsDev, asset)
 }
 
 type Config struct {

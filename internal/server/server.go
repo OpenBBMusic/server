@@ -1,6 +1,7 @@
 package server
 
 import (
+	"embed"
 	"flag"
 	"fmt"
 	"log"
@@ -12,7 +13,7 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-func Run(port int, dev bool, register func(r *gin.Engine)) {
+func Run(port int, dev bool, assetFS *embed.FS) {
 	flag.Parse()
 
 	configDir := GetConfigDir()
@@ -33,8 +34,7 @@ func Run(port int, dev bool, register func(r *gin.Engine)) {
 	}
 
 	r := gin.New()
-	r.Use(middlewares.Cors(), middlewares.RequestLogger(), gin.Recovery())
-	register(r)
+	r.Use(middlewares.Cors(), middlewares.FeAssets(assetFS), middlewares.RequestLogger(), gin.Recovery())
 	srv := api.NewServer(r, port, configDir)
 	log.Printf("服务已启动：http://127.0.0.1:%v\n", port)
 	srv.Run()

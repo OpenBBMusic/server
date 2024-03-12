@@ -10,8 +10,12 @@ import (
 )
 
 // h5 history api
-func FeAssets(assetFS embed.FS) gin.HandlerFunc {
+func FeAssets(assetFS *embed.FS) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		if assetFS == nil {
+			ctx.Next()
+			return
+		}
 		path := ctx.Request.URL.Path
 		// fmt.Println("PATH", path)
 		if strings.HasPrefix(path, "/api/") {

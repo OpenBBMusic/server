@@ -4,4 +4,4 @@ node_modules
 .bb_music
 main.exe
 main
-dist
+dist/*

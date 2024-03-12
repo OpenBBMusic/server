@@ -12,15 +12,13 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-func Run(register func(r *gin.Engine)) {
-	port := flag.Int("p", 9799, "启动端口号")
-	dev := flag.Bool("dev", false, "以开发模式启动")
+func Run(port int, dev bool, register func(r *gin.Engine)) {
 	flag.Parse()
 
 	configDir := GetConfigDir()
 
 	log.Println("configDir", configDir)
-	if !*dev {
+	if !dev {
 		fmt.Println("生产环境")
 		gin.SetMode(gin.ReleaseMode)
 		log.SetOutput(&lumberjack.Logger{
@@ -37,8 +35,8 @@ func Run(register func(r *gin.Engine)) {
 	r := gin.New()
 	r.Use(middlewares.Cors(), middlewares.RequestLogger(), gin.Recovery())
 	register(r)
-	srv := api.NewServer(r, *port, configDir)
-	log.Printf("服务已启动：http://127.0.0.1:%v\n", *port)
+	srv := api.NewServer(r, port, configDir)
+	log.Printf("服务已启动：http://127.0.0.1:%v\n", port)
 	srv.Run()
 }
 

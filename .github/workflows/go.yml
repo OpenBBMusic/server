@@ -7,31 +7,36 @@ on:
   push:
     tags:
       - 'v*'
-
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Version tag'
+        required: true
+        default: 'v0.0.1'
 jobs:
-
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        goos: [linux, windows, darwin] # 需要打包的系统
-        goarch: [amd64, arm64, arm] # 需要打包的架构
-        
+        goos: [linux]
+
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.20'
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
 
-    - name: 打包
-      run: GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} GOARM=7 go build -o ./bin/bb-music-${{github.ref_name}}-${{matrix.goos}}
-      
-    - name: Upload release
-      uses: softprops/action-gh-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        files: ./bin/*
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 打包
+        run: GOOS=${{ matrix.goos }} GOARCH=arm GOARM=7 go build -o ./bin/bb-music-${{github.ref_name}}-${{matrix.goos}}
+
+      - name: Upload release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: ./bin/*
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ github.event.inputs.tag }}
+          tag_name: ${{ github.event.inputs.tag }}
